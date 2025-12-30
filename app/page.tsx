@@ -38,6 +38,31 @@ export default function Home() {
     }
   }, [session?.currentChord, session?.timeLimit, resetTimer])
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      // Prevent shortcuts if user is typing in an input
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        return
+      }
+
+      if (event.key === ' ' || event.key === 'Enter') {
+        event.preventDefault()
+        if (session) {
+          advanceChord()
+        } else if (preferences) {
+          handleStartSession()
+        }
+      } else if (event.key === 'Escape' && session) {
+        event.preventDefault()
+        handleEndSession()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [session, preferences, advanceChord])
+
   const handleStartSession = async () => {
     if (!preferences) return
 
@@ -55,7 +80,13 @@ export default function Home() {
   if (loading && !session) {
     return (
       <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
-        <p>Loading...</p>
+        <div className="text-center space-y-4">
+          <div className="animate-pulse flex flex-col items-center gap-4">
+            <div className="h-12 w-48 bg-muted rounded"></div>
+            <div className="h-10 w-32 bg-muted rounded"></div>
+          </div>
+          <p className="text-muted-foreground" role="status" aria-live="polite">Loading practice session...</p>
+        </div>
       </div>
     )
   }
@@ -75,14 +106,15 @@ export default function Home() {
               size="lg"
               onClick={handleStartSession}
               disabled={!preferences}
-              className="text-lg px-8 py-6"
+              className="text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 min-h-[56px]"
             >
               Start Practice
             </Button>
             {preferences && (
-              <p className="text-sm text-muted-foreground">
-                Time limit: {preferences.timeLimit}s per chord
-              </p>
+              <div className="text-sm text-muted-foreground space-y-1">
+                <p>Time limit: {preferences.timeLimit}s per chord</p>
+                <p className="text-xs">Press Space or Enter to start</p>
+              </div>
             )}
           </div>
         ) : (
@@ -95,11 +127,12 @@ export default function Home() {
               />
             </div>
 
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
               <Button
                 variant="outline"
                 onClick={advanceChord}
                 disabled={loading}
+                className="w-full sm:w-auto min-h-[44px]"
               >
                 Next Chord
               </Button>
@@ -107,13 +140,17 @@ export default function Home() {
                 variant="destructive"
                 onClick={handleEndSession}
                 disabled={loading}
+                className="w-full sm:w-auto min-h-[44px]"
               >
                 End Session
               </Button>
             </div>
 
-            <div className="text-center text-muted-foreground">
+            <div className="text-center text-muted-foreground space-y-2">
               <p>Chords completed: {session.chordsCompleted}</p>
+              <p className="text-xs">
+                Keyboard shortcuts: Space/Enter = Next • Esc = End Session
+              </p>
             </div>
           </>
         )}

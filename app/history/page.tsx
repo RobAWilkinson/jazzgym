@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Dialog,
   DialogContent,
@@ -32,8 +34,11 @@ export default function HistoryPage() {
     if (selectedSessionId !== null) {
       const success = await deleteSession(selectedSessionId)
       if (success) {
+        toast.success('Practice session deleted')
         setDeleteDialogOpen(false)
         setSelectedSessionId(null)
+      } else {
+        toast.error('Failed to delete session. Please try again.')
       }
     }
   }
@@ -45,7 +50,10 @@ export default function HistoryPage() {
   const handleClearAllConfirm = async () => {
     const success = await clearAllHistory()
     if (success) {
+      toast.success('All practice history cleared')
       setClearAllDialogOpen(false)
+    } else {
+      toast.error('Failed to clear history. Please try again.')
     }
   }
 
@@ -56,7 +64,45 @@ export default function HistoryPage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p>Loading practice history...</p>
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <Skeleton className="h-9 w-56" />
+              <Skeleton className="h-5 w-96" />
+            </div>
+            <Skeleton className="h-10 w-40" />
+          </div>
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-4 w-64" />
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="space-y-2">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-32" />
+            <div className="space-y-3">
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full" />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -76,21 +122,21 @@ export default function HistoryPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Practice History</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">Practice History</h1>
+            <p className="text-sm sm:text-base text-muted-foreground mt-2">
               View your past practice sessions and statistics
             </p>
           </div>
-          <Button variant="outline" onClick={handleBack}>
+          <Button variant="outline" onClick={handleBack} className="w-full sm:w-auto min-h-[44px]">
             Back to Practice
           </Button>
         </div>
 
         {/* Statistics Card */}
         {stats && stats.totalSessions > 0 && (
-          <Card>
+          <Card data-testid="practice-stats">
             <CardHeader>
               <CardTitle>Statistics</CardTitle>
               <CardDescription>Your practice progress summary</CardDescription>
@@ -122,13 +168,14 @@ export default function HistoryPage() {
 
         {/* Session History */}
         <div>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
             <h2 className="text-xl font-semibold">Sessions</h2>
             {history.length > 0 && (
               <Button
                 variant="destructive"
                 size="sm"
                 onClick={handleClearAllClick}
+                className="w-full sm:w-auto min-h-[40px]"
               >
                 Clear All History
               </Button>

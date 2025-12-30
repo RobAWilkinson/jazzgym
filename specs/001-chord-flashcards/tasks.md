@@ -65,10 +65,10 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T018 [P] [US1] Unit test for useTimer hook in __tests__/unit/timer.test.ts (countdown, auto-complete, pause/resume, reset)
-- [ ] T019 [P] [US1] Unit test for chord selection in __tests__/unit/chord-generator.test.ts (random selection, filtering, edge cases)
-- [ ] T020 [P] [US1] Unit test for session manager in __tests__/unit/session-manager.test.ts (start session, advance chord, end session, session summary calculation)
-- [ ] T021 [P] [US1] E2E test for basic practice flow in __tests__/e2e/practice-session.spec.ts (start → display chord → timer countdown → auto-advance → end → summary)
+- [X] T018 [P] [US1] Unit test for useTimer hook in __tests__/unit/timer.test.ts (countdown, auto-complete, pause/resume, reset)
+- [X] T019 [P] [US1] Unit test for chord selection in __tests__/unit/chord-generator.test.ts (random selection, filtering, edge cases)
+- [X] T020 [P] [US1] Unit test for session manager in __tests__/unit/session-manager.test.ts (start session, advance chord, end session, session summary calculation)
+- [X] T021 [P] [US1] E2E test for basic practice flow in __tests__/e2e/practice-session.spec.ts (start → display chord → timer countdown → auto-advance → end → summary)
 
 ### Implementation for User Story 1
 
@@ -96,8 +96,8 @@
 
 ### Tests for User Story 2
 
-- [ ] T033 [P] [US2] Unit test for preferences persistence in __tests__/unit/db.test.ts (getPreferences, updatePreferences, validation)
-- [ ] T034 [P] [US2] E2E test for settings configuration in __tests__/e2e/settings.spec.ts (modify time limit, filter chord types, save preferences, verify persistence on page reload)
+- [X] T033 [P] [US2] Unit test for preferences persistence in __tests__/unit/db.test.ts (getPreferences, updatePreferences, validation)
+- [X] T034 [P] [US2] E2E test for settings configuration in __tests__/e2e/settings.spec.ts (modify time limit, filter chord types, save preferences, verify persistence on page reload)
 
 ### Implementation for User Story 2
 
@@ -122,8 +122,8 @@
 
 ### Tests for User Story 3
 
-- [ ] T043 [P] [US3] Unit test for history queries in __tests__/unit/db.test.ts (getPracticeHistory, getSessionDetails, getPracticeStats, deleteSession, clearAllHistory)
-- [ ] T044 [P] [US3] E2E test for history page in __tests__/e2e/history.spec.ts (view history, verify sessions listed, check stats, delete session, clear all)
+- [X] T043 [P] [US3] Unit test for history queries in __tests__/unit/db.test.ts (getPracticeHistory, getSessionDetails, getPracticeStats, deleteSession, clearAllHistory)
+- [X] T044 [P] [US3] E2E test for history page in __tests__/e2e/history.spec.ts (view history, verify sessions listed, check stats, delete session, clear all)
 
 ### Implementation for User Story 3
 
@@ -143,20 +143,20 @@
 
 **Purpose**: Improvements that affect multiple user stories, testing, and quality assurance
 
-- [ ] T052 [P] Add loading states to all pages (skeleton loaders for database operations using shadcn/ui components)
-- [ ] T053 [P] Add error boundaries in app/layout.tsx (catch React errors, display friendly error UI)
-- [ ] T054 [P] Add toast notifications for user feedback (success/error messages for saves, deletes using shadcn/ui Toast)
-- [ ] T055 [P] Implement responsive design for mobile browsers (test on small screens, adjust chord display size, touch-friendly buttons)
-- [ ] T056 [P] Add keyboard shortcuts for practice session (Space to start/pause, Enter to advance, Esc to end session)
-- [ ] T057 [P] Optimize performance for 100+ chord sessions (test long sessions per SC-005, add pagination or virtualization to history if needed)
-- [ ] T058 [P] Add accessibility improvements (ARIA labels, keyboard navigation, screen reader support for timer and chord display)
-- [ ] T059 Run full E2E test suite and fix any failures (__tests__/e2e/practice-session.spec.ts, settings.spec.ts, history.spec.ts)
-- [ ] T060 Run unit test suite with coverage report (aim for >80% coverage on lib/, hooks/)
-- [ ] T061 Manual testing of all acceptance scenarios from spec.md (verify all FR-001 through FR-013, SC-001 through SC-006)
-- [ ] T062 Manual testing of edge cases from spec.md (extremely short/long time limits, empty filters, 100+ chords, app closure mid-session, repetitive chord selection)
-- [ ] T063 [P] Add documentation comments to public API functions in lib/db.ts, lib/chord-generator.ts, lib/session-manager.ts
-- [ ] T064 [P] Create README.md with setup instructions, development commands, and feature overview
-- [ ] T065 Test offline functionality (disconnect network, verify app works, database persists)
+- [X] T052 [P] Add loading states to all pages (skeleton loaders for database operations using shadcn/ui components)
+- [X] T053 [P] Add error boundaries in app/layout.tsx (catch React errors, display friendly error UI)
+- [X] T054 [P] Add toast notifications for user feedback (success/error messages for saves, deletes using shadcn/ui Toast)
+- [X] T055 [P] Implement responsive design for mobile browsers (test on small screens, adjust chord display size, touch-friendly buttons)
+- [X] T056 [P] Add keyboard shortcuts for practice session (Space to start/pause, Enter to advance, Esc to end session)
+- [X] T057 [P] Optimize performance for 100+ chord sessions (test long sessions per SC-005, add pagination or virtualization to history if needed)
+- [X] T058 [P] Add accessibility improvements (ARIA labels, keyboard navigation, screen reader support for timer and chord display)
+- [X] T059 Run full E2E test suite and fix any failures (__tests__/e2e/practice-session.spec.ts, settings.spec.ts, history.spec.ts)
+- [X] T060 Run unit test suite with coverage report (aim for >80% coverage on lib/, hooks/)
+- [X] T061 Manual testing of all acceptance scenarios from spec.md (verify all FR-001 through FR-013, SC-001 through SC-006)
+- [X] T062 Manual testing of edge cases from spec.md (extremely short/long time limits, empty filters, 100+ chords, app closure mid-session, repetitive chord selection)
+- [X] T063 [P] Add documentation comments to public API functions in lib/db.ts, lib/chord-generator.ts, lib/session-manager.ts
+- [X] T064 [P] Create README.md with setup instructions, development commands, and feature overview
+- [X] T065 Test offline functionality (disconnect network, verify app works, database persists)
 
 ---
 

@@ -54,9 +54,9 @@ export function PracticeHistory({ sessions, onDelete, onViewDetails }: PracticeH
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-testid="history-list" role="list" aria-label="Practice session history">
       {sessions.map((session) => (
-        <Card key={session.id}>
+        <Card key={session.id} data-testid="session-item">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -69,9 +69,11 @@ export function PracticeHistory({ sessions, onDelete, onViewDetails }: PracticeH
                   </span>
                 </div>
                 <div className="mt-1 flex gap-4 text-sm text-muted-foreground">
-                  <span>{session.chordCount} chords</span>
-                  <span>{calculateDuration(session.startedAt, session.endedAt)}</span>
-                  <span>{session.timeLimit}s per chord</span>
+                  <span aria-label={`${session.chordCount} chords practiced`}>{session.chordCount} chords</span>
+                  <span aria-label={`Duration: ${calculateDuration(session.startedAt, session.endedAt)}`}>
+                    {calculateDuration(session.startedAt, session.endedAt)}
+                  </span>
+                  <span aria-label={`${session.timeLimit} seconds per chord`}>{session.timeLimit}s per chord</span>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -80,6 +82,7 @@ export function PracticeHistory({ sessions, onDelete, onViewDetails }: PracticeH
                     variant="outline"
                     size="sm"
                     onClick={() => onViewDetails(session.id)}
+                    aria-label={`View details for session from ${formatDate(session.startedAt)}`}
                   >
                     Details
                   </Button>
@@ -88,6 +91,7 @@ export function PracticeHistory({ sessions, onDelete, onViewDetails }: PracticeH
                   variant="destructive"
                   size="sm"
                   onClick={() => onDelete(session.id)}
+                  aria-label={`Delete session from ${formatDate(session.startedAt)}`}
                 >
                   Delete
                 </Button>
