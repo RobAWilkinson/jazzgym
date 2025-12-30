@@ -33,13 +33,14 @@ export function ChordFilter({ selectedTypes, onChange }: ChordFilterProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <Button
           type="button"
           variant="outline"
           size="sm"
           onClick={handleSelectAll}
           disabled={selectedTypes.length === allTypes.length}
+          className="min-h-[40px]"
         >
           Select All
         </Button>
@@ -49,6 +50,7 @@ export function ChordFilter({ selectedTypes, onChange }: ChordFilterProps) {
           size="sm"
           onClick={handleClearAll}
           disabled={selectedTypes.length === 1}
+          className="min-h-[40px]"
         >
           Clear All
         </Button>

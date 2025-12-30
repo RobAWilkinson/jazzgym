@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { ChordFilter } from '@/components/chord-filter'
 import { usePreferences } from '@/hooks/use-preferences'
 import { ChordType } from '@/lib/types'
@@ -17,8 +19,6 @@ export default function SettingsPage() {
   const [timeLimit, setTimeLimit] = useState<number>(10)
   const [enabledChordTypes, setEnabledChordTypes] = useState<ChordType[]>([])
   const [hasChanges, setHasChanges] = useState(false)
-  const [saveError, setSaveError] = useState<string | null>(null)
-  const [saveSuccess, setSaveSuccess] = useState(false)
 
   // Initialize form values from preferences
   useEffect(() => {
@@ -38,17 +38,14 @@ export default function SettingsPage() {
   }, [timeLimit, enabledChordTypes, preferences])
 
   const handleSave = async () => {
-    setSaveError(null)
-    setSaveSuccess(false)
-
     // Validation
     if (timeLimit < 3 || timeLimit > 60) {
-      setSaveError('Time limit must be between 3 and 60 seconds')
+      toast.error('Time limit must be between 3 and 60 seconds')
       return
     }
 
     if (enabledChordTypes.length === 0) {
-      setSaveError('At least one chord type must be selected')
+      toast.error('At least one chord type must be selected')
       return
     }
 
@@ -58,11 +55,10 @@ export default function SettingsPage() {
     })
 
     if (success) {
-      setSaveSuccess(true)
+      toast.success('Settings saved successfully!')
       setHasChanges(false)
-      setTimeout(() => setSaveSuccess(false), 3000)
     } else {
-      setSaveError('Failed to save preferences. Please try again.')
+      toast.error('Failed to save preferences. Please try again.')
     }
   }
 
@@ -72,7 +68,6 @@ export default function SettingsPage() {
       setTimeLimit(preferences.timeLimit)
       setEnabledChordTypes(preferences.enabledChordTypes)
       setHasChanges(false)
-      setSaveError(null)
     }
   }
 
@@ -83,7 +78,38 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p>Loading preferences...</p>
+        <div className="max-w-3xl mx-auto space-y-6">
+          <div className="space-y-2">
+            <Skeleton className="h-9 w-48" />
+            <Skeleton className="h-5 w-96" />
+          </div>
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-56" />
+              <Skeleton className="h-4 w-full" />
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-48" />
+                <Skeleton className="h-10 w-32" />
+                <Skeleton className="h-4 w-64" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-40" />
+                <Skeleton className="h-4 w-96" />
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Skeleton className="h-10 w-full" />
+            </CardFooter>
+          </Card>
+        </div>
       </div>
     )
   }
@@ -148,34 +174,24 @@ export default function SettingsPage() {
                 onChange={setEnabledChordTypes}
               />
             </div>
-
-            {/* Error/Success Messages */}
-            {saveError && (
-              <div className="p-3 rounded-md bg-destructive/10 text-destructive text-sm">
-                {saveError}
-              </div>
-            )}
-            {saveSuccess && (
-              <div className="p-3 rounded-md bg-green-100 text-green-800 text-sm">
-                Settings saved successfully!
-              </div>
-            )}
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={handleBack}>
+          <CardFooter className="flex flex-col sm:flex-row justify-between gap-3">
+            <Button variant="outline" onClick={handleBack} className="w-full sm:w-auto min-h-[44px]">
               Back to Practice
             </Button>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <Button
                 variant="outline"
                 onClick={handleCancel}
                 disabled={!hasChanges}
+                className="min-h-[44px]"
               >
                 Cancel
               </Button>
               <Button
                 onClick={handleSave}
                 disabled={!hasChanges}
+                className="min-h-[44px]"
               >
                 Save Changes
               </Button>
