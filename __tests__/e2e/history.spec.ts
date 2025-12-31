@@ -12,10 +12,11 @@ test.describe('Practice History Page', () => {
 
     // Close summary modal if it appears
     await page.waitForTimeout(500);
-    const closeButton = page.getByRole('button', { name: /close|ok|dismiss/i });
-    if (await closeButton.isVisible()) {
+    const closeButton = page.getByRole('button', { name: 'Close session summary' });
+    if (await closeButton.isVisible().catch(() => false)) {
       await closeButton.click();
     } else {
+      // Try pressing Escape as fallback
       await page.keyboard.press('Escape');
     }
 
@@ -175,8 +176,8 @@ test.describe('History Navigation', () => {
   test('should navigate to history page from home', async ({ page }) => {
     await page.goto('/');
 
-    // Find history link
-    const historyLink = page.getByRole('link', { name: /history|past sessions/i });
+    // Find chord history link
+    const historyLink = page.getByRole('link', { name: 'Chord History' });
     await expect(historyLink).toBeVisible();
 
     // Click to history
@@ -200,7 +201,7 @@ test.describe('History Navigation', () => {
 
 test.describe('History Details', () => {
   test('should show chord names for each session', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/chords');
 
     // Complete a session with multiple chords
     await page.getByRole('button', { name: /start/i }).click();
@@ -209,8 +210,8 @@ test.describe('History Details', () => {
 
     // Close summary
     await page.waitForTimeout(500);
-    const closeButton = page.getByRole('button', { name: /close|ok|dismiss/i });
-    if (await closeButton.isVisible()) {
+    const closeButton = page.getByRole('button', { name: 'Close session summary' });
+    if (await closeButton.isVisible().catch(() => false)) {
       await closeButton.click();
     } else {
       await page.keyboard.press('Escape');
@@ -224,7 +225,7 @@ test.describe('History Details', () => {
   });
 
   test('should display sessions in descending order (newest first)', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/chords');
 
     // Create multiple sessions
     for (let i = 0; i < 2; i++) {
@@ -234,8 +235,8 @@ test.describe('History Details', () => {
       await page.waitForTimeout(500);
 
       // Close summary
-      const closeButton = page.getByRole('button', { name: /close|ok|dismiss/i });
-      if (await closeButton.isVisible()) {
+      const closeButton = page.getByRole('button', { name: 'Close session summary' });
+      if (await closeButton.isVisible().catch(() => false)) {
         await closeButton.click();
       } else {
         await page.keyboard.press('Escape');
@@ -256,7 +257,7 @@ test.describe('History Details', () => {
 
 test.describe('Practice Stats', () => {
   test('should calculate and display total practice statistics', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/chords');
 
     // Complete a practice session
     await page.getByRole('button', { name: /start/i }).click();
@@ -264,8 +265,8 @@ test.describe('Practice Stats', () => {
     await page.getByRole('button', { name: /end|stop/i }).click();
 
     await page.waitForTimeout(500);
-    const closeButton = page.getByRole('button', { name: /close|ok|dismiss/i });
-    if (await closeButton.isVisible()) {
+    const closeButton = page.getByRole('button', { name: 'Close session summary' });
+    if (await closeButton.isVisible().catch(() => false)) {
       await closeButton.click();
     } else {
       await page.keyboard.press('Escape');

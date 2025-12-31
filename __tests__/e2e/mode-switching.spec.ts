@@ -15,8 +15,8 @@ test.describe('Mode Switching', () => {
 
     // Should show title and descriptions
     await expect(page.getByText('JazzGym Practice')).toBeVisible();
-    await expect(page.getByText('Chord Practice')).toBeVisible();
-    await expect(page.getByText('Scale Practice')).toBeVisible();
+    await expect(chordMode.getByText('Chord Practice')).toBeVisible();
+    await expect(scaleMode.getByText('Scale Practice')).toBeVisible();
   });
 
   test('should navigate to chord practice when chord mode selected', async ({ page }) => {
