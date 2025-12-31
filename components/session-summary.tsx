@@ -53,7 +53,7 @@ export function SessionSummary({ summary, open, onClose, mode = 'chord' }: Sessi
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={onClose} aria-label="Close session summary">Close</Button>
+          <Button onClick={onClose} aria-label="Dismiss session summary">Done</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

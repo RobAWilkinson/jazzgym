@@ -48,7 +48,7 @@ export function ModeSelector({ className }: ModeSelectorProps) {
                 router.push('/chords')
               }}
             >
-              Start Chord Practice
+              Start Practice
             </Button>
           </CardContent>
         </Card>
@@ -79,7 +79,7 @@ export function ModeSelector({ className }: ModeSelectorProps) {
                 router.push('/scales')
               }}
             >
-              Start Scale Practice
+              Start Practice
             </Button>
           </CardContent>
         </Card>
