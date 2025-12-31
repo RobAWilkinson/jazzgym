@@ -1,0 +1,175 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { ScaleDisplay } from '@/components/scale-display'
+import { CountdownTimer } from '@/components/countdown-timer'
+import { SessionSummary } from '@/components/session-summary'
+import { useScalePracticeSession } from '@/hooks/use-scale-practice-session'
+import { useTimer } from '@/hooks/use-timer'
+import { loadScalePreferences } from '@/lib/db'
+import type { ScalePreferences, ScaleSessionSummary } from '@/lib/types'
+
+export default function ScalePracticePage() {
+  const { session, loading, startPractice, advanceScale, endPractice } = useScalePracticeSession()
+  const [preferences, setPreferences] = useState<ScalePreferences | null>(null)
+  const [summary, setSummary] = useState<ScaleSessionSummary | null>(null)
+  const [showSummary, setShowSummary] = useState(false)
+
+  // Load preferences on mount
+  useEffect(() => {
+    loadScalePreferences().then(setPreferences).catch(console.error)
+  }, [])
+
+  // Timer for auto-advancing scales
+  const { timeLeft, reset: resetTimer } = useTimer(
+    session?.timeLimit ?? 10,
+    () => {
+      if (session) {
+        advanceScale()
+      }
+    }
+  )
+
+  // Reset timer when scale changes
+  useEffect(() => {
+    if (session?.currentScale) {
+      resetTimer(session.timeLimit)
+    }
+  }, [session?.currentScale, session?.timeLimit, resetTimer])
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      // Prevent shortcuts if user is typing in an input
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        return
+      }
+
+      if (event.key === ' ' || event.key === 'Enter') {
+        event.preventDefault()
+        if (session) {
+          advanceScale()
+        } else if (preferences) {
+          handleStartSession()
+        }
+      } else if (event.key === 'Escape' && session) {
+        event.preventDefault()
+        handleEndSession()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [session, preferences, advanceScale])
+
+  const handleStartSession = async () => {
+    if (!preferences) return
+
+    await startPractice(preferences.timeLimit, preferences.enabledScaleTypes)
+  }
+
+  const handleEndSession = async () => {
+    const result = await endPractice()
+    if (result) {
+      setSummary(result)
+      setShowSummary(true)
+    }
+  }
+
+  if (loading && !session) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
+        <div className="text-center space-y-4">
+          <div className="animate-pulse flex flex-col items-center gap-4">
+            <div className="h-12 w-48 bg-muted rounded"></div>
+            <div className="h-10 w-32 bg-muted rounded"></div>
+          </div>
+          <p className="text-muted-foreground" role="status" aria-live="polite">Loading practice session...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto space-y-8">
+        {!session ? (
+          <div className="text-center space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Ready to Practice Scales?</h2>
+              <p className="text-muted-foreground">
+                Start a practice session to work on your scale recognition
+              </p>
+            </div>
+            <div className="flex flex-col items-center gap-3">
+              <Button
+                size="lg"
+                onClick={handleStartSession}
+                disabled={!preferences}
+                className="text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 min-h-[56px]"
+              >
+                Start Practice
+              </Button>
+              <Link href="/scales-settings">
+                <Button variant="outline" size="sm">
+                  Settings
+                </Button>
+              </Link>
+            </div>
+            {preferences && (
+              <div className="text-sm text-muted-foreground space-y-1">
+                <p>Time limit: {preferences.timeLimit}s per scale</p>
+                <p className="text-xs">Press Space or Enter to start</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            <div className="space-y-6">
+              <ScaleDisplay scaleName={session.currentScale?.displayName ?? ''} />
+              <CountdownTimer
+                timeLeft={timeLeft}
+                totalTime={session.timeLimit}
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+              <Button
+                variant="outline"
+                onClick={advanceScale}
+                disabled={loading}
+                className="w-full sm:w-auto min-h-[44px]"
+              >
+                Next Scale
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleEndSession}
+                disabled={loading}
+                className="w-full sm:w-auto min-h-[44px]"
+              >
+                End Session
+              </Button>
+            </div>
+
+            <div className="text-center text-muted-foreground space-y-2">
+              <p>Scales completed: {session.scalesCompleted}</p>
+              <p className="text-xs">
+                Keyboard shortcuts: Space/Enter = Next • Esc = End Session
+              </p>
+            </div>
+          </>
+        )}
+
+        <SessionSummary
+          summary={summary}
+          open={showSummary}
+          onClose={() => setShowSummary(false)}
+          mode="scale"
+        />
+      </div>
+    </div>
+  )
+}

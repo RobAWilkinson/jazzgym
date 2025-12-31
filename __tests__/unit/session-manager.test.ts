@@ -26,14 +26,14 @@ describe('Session Manager', () => {
       expect(session.chordsCompleted).toBe(0);
       expect(session.timeLimit).toBe(timeLimit);
       expect(session.currentChord).toBeDefined();
-      expect(['Major', 'Minor']).toContain(session.currentChord.type);
+      expect(['Major', 'Minor']).toContain(session.currentChord?.type);
       expect(session.availableChords.length).toBeGreaterThan(0);
     });
 
     it('should filter chords by enabled types', async () => {
       const session = await startSession(10, ['Major']);
 
-      expect(session.currentChord.type).toBe('Major');
+      expect(session.currentChord?.type).toBe('Major');
       session.availableChords.forEach(chord => {
         expect(chord.type).toBe('Major');
       });
@@ -67,7 +67,7 @@ describe('Session Manager', () => {
       const nextState = await advanceToNextChord(initialState);
 
       expect(nextState.currentChord).toBeDefined();
-      expect(['Major', 'Minor', 'Dominant']).toContain(nextState.currentChord.type);
+      expect(['Major', 'Minor', 'Dominant']).toContain(nextState.currentChord?.type);
     });
 
     it('should maintain session state properties', async () => {

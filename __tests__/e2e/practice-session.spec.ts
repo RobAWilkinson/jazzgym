@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Practice Session Flow', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/chords');
   });
 
   test('should display chord with timer and start practice session', async ({ page }) => {

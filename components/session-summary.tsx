@@ -9,16 +9,25 @@ import {
   DialogFooter,
 } from './ui/dialog'
 import { Button } from './ui/button'
-import { SessionSummary as SessionSummaryType } from '@/lib/types'
+import { SessionSummary as SessionSummaryType, ScaleSessionSummary } from '@/lib/types'
 
 interface SessionSummaryProps {
-  summary: SessionSummaryType | null
+  summary: SessionSummaryType | ScaleSessionSummary | null
   open: boolean
   onClose: () => void
+  mode?: 'chord' | 'scale'
 }
 
-export function SessionSummary({ summary, open, onClose }: SessionSummaryProps) {
+export function SessionSummary({ summary, open, onClose, mode = 'chord' }: SessionSummaryProps) {
   if (!summary) return null
+
+  const isChordMode = mode === 'chord'
+  const itemCount = isChordMode
+    ? (summary as SessionSummaryType).chordsCompleted
+    : (summary as ScaleSessionSummary).scalesCompleted
+  const itemLabel = isChordMode ? 'Chords' : 'Scales'
+  const itemLabelLower = isChordMode ? 'chords' : 'scales'
+  const practiceSubject = isChordMode ? 'jazz chords' : 'scales'
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -26,14 +35,14 @@ export function SessionSummary({ summary, open, onClose }: SessionSummaryProps) 
         <DialogHeader>
           <DialogTitle>Practice Session Complete!</DialogTitle>
           <DialogDescription id="session-summary-description">
-            Great job practicing your jazz chords.
+            Great job practicing your {practiceSubject}.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4" role="region" aria-label="Session statistics">
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">Chords Practiced:</span>
-            <span className="text-2xl font-bold" aria-label={`${summary.chordsCompleted} chords practiced`}>
-              {summary.chordsCompleted}
+            <span className="text-muted-foreground">{itemLabel} Practiced:</span>
+            <span className="text-2xl font-bold" aria-label={`${itemCount} ${itemLabelLower} practiced`}>
+              {itemCount}
             </span>
           </div>
           <div className="flex justify-between items-center">
