@@ -233,7 +233,8 @@ test.describe('Settings Page', () => {
       // Value should revert or page should navigate away
       const currentValue = await timeLimitInput.inputValue();
       // Either value reverted or we're on a different page
-      const isOnSettingsPage = await page.url().then(url => url.includes('/settings'));
+      const currentUrl = page.url();
+      const isOnSettingsPage = currentUrl.includes('/settings');
       expect(isOnSettingsPage || currentValue === originalValue).toBe(true);
     }
   });
