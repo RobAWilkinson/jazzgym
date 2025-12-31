@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ChordDisplay } from '@/components/chord-display'
 import { CountdownTimer } from '@/components/countdown-timer'
@@ -102,14 +103,21 @@ export default function ChordPracticePage() {
                 Start a practice session to work on your jazz chord recognition
               </p>
             </div>
-            <Button
-              size="lg"
-              onClick={handleStartSession}
-              disabled={!preferences}
-              className="text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 min-h-[56px]"
-            >
-              Start Practice
-            </Button>
+            <div className="flex flex-col items-center gap-3">
+              <Button
+                size="lg"
+                onClick={handleStartSession}
+                disabled={!preferences}
+                className="text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 min-h-[56px]"
+              >
+                Start Practice
+              </Button>
+              <Link href="/settings">
+                <Button variant="outline" size="sm">
+                  Settings
+                </Button>
+              </Link>
+            </div>
             {preferences && (
               <div className="text-sm text-muted-foreground space-y-1">
                 <p>Time limit: {preferences.timeLimit}s per chord</p>
