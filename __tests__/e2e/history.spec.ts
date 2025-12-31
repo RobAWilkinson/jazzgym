@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Practice History Page', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to home and complete a practice session first
-    await page.goto('/');
+    // Navigate to chord practice and complete a practice session first
+    await page.goto('/chords');
 
     // Start and quickly end a session to create history
     await page.getByRole('button', { name: /start/i }).click();
