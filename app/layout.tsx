@@ -5,8 +5,8 @@ import { Providers } from "@/components/providers"
 import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
-  title: "JazzGym - Chord Flashcards",
-  description: "Practice jazz guitar chords with timed flashcards",
+  title: "JazzGym - Practice Flashcards",
+  description: "Practice jazz guitar chords and scales with timed flashcards",
 }
 
 export default function RootLayout({
@@ -25,24 +25,36 @@ export default function RootLayout({
                   <h1 className="text-xl sm:text-2xl font-bold">
                     <Link href="/">JazzGym</Link>
                   </h1>
-                  <nav className="flex gap-3 sm:gap-4 text-sm sm:text-base">
+                  <nav className="flex flex-wrap gap-3 sm:gap-4 text-sm sm:text-base justify-center">
                     <Link
                       href="/"
                       className="font-medium hover:underline"
                     >
-                      Practice
+                      Home
                     </Link>
                     <Link
-                      href="/settings"
+                      href="/chords"
                       className="font-medium hover:underline"
                     >
-                      Settings
+                      Chords
+                    </Link>
+                    <Link
+                      href="/scales"
+                      className="font-medium hover:underline"
+                    >
+                      Scales
                     </Link>
                     <Link
                       href="/history"
                       className="font-medium hover:underline"
                     >
-                      History
+                      Chord History
+                    </Link>
+                    <Link
+                      href="/scales-history"
+                      className="font-medium hover:underline"
+                    >
+                      Scale History
                     </Link>
                   </nav>
                 </div>
