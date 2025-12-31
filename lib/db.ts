@@ -38,15 +38,27 @@ export async function initializeDatabase(): Promise<void> {
   } else {
     // Create new database
     db = new SQL.Database()
-
-    // Load and execute schema
-    const schemaResponse = await fetch('/db/schema.sql')
-    const schema = await schemaResponse.text()
-    db.exec(schema)
-
-    // Save initial database
-    await saveDatabaseToStorage()
   }
+
+  // Always execute schema to ensure all tables exist
+  // Uses CREATE TABLE IF NOT EXISTS, so safe to run on existing database
+  try {
+    const schemaResponse = await fetch('/db/schema.sql')
+    if (!schemaResponse.ok) {
+      console.error('Failed to fetch schema.sql:', schemaResponse.status)
+      throw new Error(`Failed to fetch schema: ${schemaResponse.status}`)
+    }
+    const schema = await schemaResponse.text()
+    console.log('Executing database schema...')
+    db.exec(schema)
+    console.log('Database schema executed successfully')
+  } catch (error) {
+    console.error('Error initializing database schema:', error)
+    throw error
+  }
+
+  // Save database
+  await saveDatabaseToStorage()
 }
 
 /**
